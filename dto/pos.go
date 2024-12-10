@@ -5,12 +5,14 @@ type GetByIdRequest struct {
 }
 
 type PosRequest struct {
-	ID         string           `json:"id"`
-	UserID     string           `json:"user_id"`
-	MerchantID string           `json:"merchant_id"`
-	Quantity   int              `json:"quantity"`
-	CreatedBy  string           `json:"created_by"`
-	Product    []ProductRequest `json:"product"`
+	ID            string           `json:"id"`
+	UserID        string           `json:"user_id"`
+	MerchantID    string           `json:"merchant_id"`
+	StatusPayment string           `json:"status_payment"`
+	Quantity      int              `json:"quantity"`
+	CreatedBy     string           `json:"created_by"`
+	Product       []ProductRequest `json:"product"`
+	Description   string           `json:"description"`
 }
 
 type ProductRequest struct {
@@ -21,13 +23,15 @@ type ProductRequest struct {
 }
 
 type PosResponse struct {
-	ID         string            `json:"id"`
-	UserID     string            `json:"user_id"`
-	MerchantID string            `json:"merchant_id"`
-	CreatedBy  string            `json:"created_by"`
-	Quantity   int               `json:"-"`
-	Product    []ProductResponse `json:"product"`
-	TotalPrice int               `json:"total_price"`
+	ID            string            `json:"id"`
+	UserID        string            `json:"user_id"`
+	StatusPayment string            `json:"status_payment"`
+	MerchantID    string            `json:"merchant_id"`
+	CreatedBy     string            `json:"created_by"`
+	Quantity      int               `json:"-"`
+	Product       []ProductResponse `json:"product"`
+	TotalPrice    int               `json:"total_price"`
+	Description   string            `json:"description"`
 }
 
 type ProductResponse struct {
@@ -41,10 +45,12 @@ type PosUpdateRequest struct {
 	ID            string `json:"id"`
 	StatusPayment string `json:"status_payment"`
 	UpdatedBy     string `json:"updated_by"`
+	Description   string `json:"description"`
 }
 
 type PosUpdateResponse struct {
 	ID            string `json:"id"`
 	StatusPayment string `json:"status_payment"`
 	UpdatedBy     string `json:"updated_by"`
+	Description   string `json:"description"`
 }

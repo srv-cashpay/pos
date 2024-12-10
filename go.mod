@@ -4,7 +4,7 @@ go 1.21.0
 
 require (
 	github.com/labstack/echo/v4 v4.12.0
-	github.com/srv-cashpay/middlewares v0.0.0-20241115071029-1045a21a2fbf
+	github.com/srv-cashpay/middlewares v0.0.0-20241205063440-0179e9f99fa9
 	github.com/srv-cashpay/util v0.0.0-20241027032732-ad63c2c98116
 )
 

@@ -1,7 +1,7 @@
 version: '3.1'
 
 services:
-  api_merchant:
+  api_pos:
     restart: always
     container_name: api_pos
     build:

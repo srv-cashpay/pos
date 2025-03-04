@@ -1,6 +1,8 @@
 package history
 
 import (
+	"encoding/json"
+
 	dto "github.com/srv-cashpay/pos/dto"
 	"github.com/srv-cashpay/pos/entity"
 )
@@ -14,8 +16,19 @@ func (b *historyRepository) GetById(req dto.GetByIdRequest) (*dto.PosResponse, e
 		return nil, err
 	}
 
+	var products []dto.ProductResponse
+	if err := json.Unmarshal(tr.Product, &products); err != nil {
+		return nil, err
+	}
+
 	response := &dto.PosResponse{
-		UserID: tr.UserID,
+		ID:            tr.ID,
+		UserID:        tr.UserID,
+		StatusPayment: tr.StatusPayment,
+		MerchantID:    tr.MerchantID,
+		CreatedBy:     tr.CreatedBy,
+		Product:       products,
+		TotalPrice:    calculateTotalPrice(products),
 	}
 
 	return response, nil

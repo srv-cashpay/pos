@@ -36,6 +36,8 @@ func New() *echo.Echo {
 	history := e.Group("/api/history", middlewares.AuthorizeJWT(JWT))
 	{
 		history.GET("/pagination", historyH.Get)
+		history.GET("/:id", historyH.GetById)
+
 	}
 
 	return e

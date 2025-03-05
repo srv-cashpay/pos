@@ -33,11 +33,11 @@ func New() *echo.Echo {
 		pos.PUT("/update/:id", posH.Update)
 		pos.GET("/:id", posH.GetById)
 	}
+
 	history := e.Group("/api/history", middlewares.AuthorizeJWT(JWT))
 	{
 		history.GET("/pagination", historyH.Get)
 		history.GET("/:id", historyH.GetById)
-
 	}
 
 	return e

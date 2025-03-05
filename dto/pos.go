@@ -1,7 +1,8 @@
 package dto
 
 type GetByIdRequest struct {
-	ID string `param:"id" validate:"required"`
+	ID     string `param:"id" validate:"required"`
+	UserID string `json:"user_id"`
 }
 
 type PosRequest struct {
@@ -32,6 +33,10 @@ type PosResponse struct {
 	Product       []ProductResponse `json:"product"`
 	TotalPrice    int               `json:"total_price"`
 	Description   string            `json:"description"`
+	MerchantName  string            `json:"merchant_name"`
+	Address       string            `json:"address"`
+	Country       string            `json:"country"`
+	City          string            `json:"city"`
 }
 
 type ProductResponse struct {

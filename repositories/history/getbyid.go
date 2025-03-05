@@ -12,7 +12,8 @@ func (b *historyRepository) GetById(req dto.GetByIdRequest) (*dto.PosResponse, e
 		ID: req.ID,
 	}
 
-	if err := b.DB.Where("id = ?", tr.ID).Take(&tr).Error; err != nil {
+	// Mengambil data Pos sekaligus memuat relasi Merchant
+	if err := b.DB.Where("id = ?", tr.ID).Preload("Merchant").Take(&tr).Error; err != nil {
 		return nil, err
 	}
 
@@ -28,6 +29,10 @@ func (b *historyRepository) GetById(req dto.GetByIdRequest) (*dto.PosResponse, e
 		MerchantID:    tr.MerchantID,
 		CreatedBy:     tr.CreatedBy,
 		Product:       products,
+		MerchantName:  tr.Merchant.MerchantName,
+		Address:       tr.Merchant.Address,
+		City:          tr.Merchant.City,
+		Country:       tr.Merchant.Country,
 		TotalPrice:    calculateTotalPrice(products),
 	}
 

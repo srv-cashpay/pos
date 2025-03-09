@@ -4,7 +4,7 @@ import (
 	"github.com/srv-cashpay/pos/entity"
 )
 
-func (r *posRepository) Create(pos entity.Pos) (entity.Pos, error) {
+func (r *posRepository) Paid(pos entity.Pos) (entity.Pos, error) {
 	if err := r.DB.Create(&pos).Error; err != nil {
 		return entity.Pos{}, err
 	}

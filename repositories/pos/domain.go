@@ -7,7 +7,8 @@ import (
 )
 
 type DomainRepository interface {
-	Create(req entity.Pos) (entity.Pos, error)
+	Paid(req entity.Pos) (entity.Pos, error)
+	Unpaid(pos entity.Pos) (entity.Pos, error)
 	Update(req dto.PosUpdateRequest) (dto.PosUpdateResponse, error)
 	GetById(req dto.GetByIdRequest) (*dto.PosUpdateResponse, error)
 }

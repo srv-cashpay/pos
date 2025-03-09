@@ -9,7 +9,7 @@ import (
 	util "github.com/srv-cashpay/util/s"
 )
 
-func (s *posService) Create(req dto.PosRequest) (dto.PosResponse, error) {
+func (s *posService) Paid(req dto.PosRequest) (dto.PosResponse, error) {
 	// Konversi produk ke JSON
 	productsJSON, err := json.Marshal(req.Product)
 	if err != nil {
@@ -19,6 +19,11 @@ func (s *posService) Create(req dto.PosRequest) (dto.PosResponse, error) {
 	// Hitung total harga
 	totalPrice := calculateTotalPrice(req.Product)
 
+	// Validasi apakah `pay` cukup untuk membayar total harga
+	if req.Pay < totalPrice {
+		return dto.PosResponse{}, fmt.Errorf("jumlah pembayaran tidak boleh kurang dari total harga")
+	}
+
 	// Buat struct Pos untuk disimpan
 	pos := entity.Pos{
 		ID:            util.GenerateRandomString(),
@@ -26,12 +31,13 @@ func (s *posService) Create(req dto.PosRequest) (dto.PosResponse, error) {
 		MerchantID:    req.MerchantID,
 		StatusPayment: req.StatusPayment,
 		Product:       productsJSON,
+		Pay:           req.Pay,
 		CreatedBy:     req.CreatedBy,
-		Description:   fmt.Sprintf("%s telah mendapatkan total harga penjualan sebesar %d", req.CreatedBy, totalPrice),
+		Description:   "Terima Kasih",
 	}
 
 	// Simpan ke database
-	createdPos, err := s.Repo.Create(pos)
+	createdPos, err := s.Repo.Paid(pos)
 	if err != nil {
 		return dto.PosResponse{}, err
 	}
@@ -49,6 +55,7 @@ func (s *posService) Create(req dto.PosRequest) (dto.PosResponse, error) {
 		StatusPayment: createdPos.StatusPayment,
 		CreatedBy:     createdPos.CreatedBy,
 		Product:       responseProducts,
+		Pay:           createdPos.Pay,
 		TotalPrice:    totalPrice,
 		Description:   createdPos.Description,
 	}, nil

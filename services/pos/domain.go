@@ -8,7 +8,8 @@ import (
 )
 
 type PosService interface {
-	Create(req dto.PosRequest) (dto.PosResponse, error)
+	Paid(req dto.PosRequest) (dto.PosResponse, error)
+	Unpaid(req dto.PosRequest) (dto.PosResponse, error)
 	GetById(req dto.GetByIdRequest) (*dto.PosUpdateResponse, error)
 	Update(req dto.PosUpdateRequest) (dto.PosUpdateResponse, error)
 }

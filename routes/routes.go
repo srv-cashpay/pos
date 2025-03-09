@@ -29,7 +29,8 @@ func New() *echo.Echo {
 
 	pos := e.Group("/api/pos", middlewares.AuthorizeJWT(JWT))
 	{
-		pos.POST("/create", posH.Create)
+		pos.POST("/create/paid", posH.Paid)
+		pos.POST("/create/unpaid", posH.Unpaid)
 		pos.PUT("/update/:id", posH.Update)
 		pos.GET("/:id", posH.GetById)
 	}

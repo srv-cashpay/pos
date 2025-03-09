@@ -6,7 +6,7 @@ import (
 	res "github.com/srv-cashpay/util/s/response"
 )
 
-func (h *domainHandler) Create(c echo.Context) error {
+func (h *domainHandler) Unpaid(c echo.Context) error {
 	var req dto.PosRequest
 	var resp dto.PosResponse
 
@@ -33,7 +33,7 @@ func (h *domainHandler) Create(c echo.Context) error {
 		return res.ErrorBuilder(&res.ErrorConstant.BadRequest, err).Send(c)
 	}
 
-	resp, err = h.servicePos.Create(req)
+	resp, err = h.servicePos.Unpaid(req)
 	if err != nil {
 		return res.ErrorResponse(err).Send(c)
 	}

@@ -7,7 +7,8 @@ import (
 )
 
 type DomainHandler interface {
-	Create(c echo.Context) error
+	Paid(c echo.Context) error
+	Unpaid(c echo.Context) error
 	Update(c echo.Context) error
 	GetById(c echo.Context) error
 }

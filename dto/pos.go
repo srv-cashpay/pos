@@ -1,5 +1,11 @@
 package dto
 
+import (
+	"encoding/json"
+	"strconv"
+	"strings"
+)
+
 type GetByIdRequest struct {
 	ID     string `param:"id" validate:"required"`
 	UserID string `json:"user_id"`
@@ -13,6 +19,7 @@ type PosRequest struct {
 	Quantity      int              `json:"quantity"`
 	CreatedBy     string           `json:"created_by"`
 	Product       []ProductRequest `json:"product"`
+	Pay           int              `json:"pay"`
 	Description   string           `json:"description"`
 }
 
@@ -28,15 +35,16 @@ type PosResponse struct {
 	UserID        string            `json:"user_id"`
 	StatusPayment string            `json:"status_payment"`
 	MerchantID    string            `json:"merchant_id"`
-	CreatedBy     string            `json:"created_by"`
-	Quantity      int               `json:"-"`
-	Product       []ProductResponse `json:"product"`
-	TotalPrice    int               `json:"total_price"`
-	Description   string            `json:"description"`
 	MerchantName  string            `json:"merchant_name"`
 	Address       string            `json:"address"`
 	Country       string            `json:"country"`
 	City          string            `json:"city"`
+	CreatedBy     string            `json:"created_by"`
+	Quantity      int               `json:"-"`
+	Product       []ProductResponse `json:"product"`
+	TotalPrice    int               `json:"total_price"`
+	Pay           int               `json:"pay"`
+	Description   string            `json:"description"`
 }
 
 type ProductResponse struct {
@@ -58,4 +66,39 @@ type PosUpdateResponse struct {
 	StatusPayment string `json:"status_payment"`
 	UpdatedBy     string `json:"updated_by"`
 	Description   string `json:"description"`
+}
+
+func (r PosResponse) MarshalJSON() ([]byte, error) {
+	type Alias PosResponse
+	return json.Marshal(&struct {
+		*Alias
+		TotalPrice string `json:"total_price"`
+		Pay        string `json:"pay"`
+	}{
+		Alias:      (*Alias)(&r),
+		TotalPrice: formatRupiah(r.TotalPrice),
+		Pay:        formatRupiah(r.Pay),
+	})
+}
+
+func formatRupiah(amount int) string {
+	s := strconv.Itoa(amount)
+	var result strings.Builder
+	length := len(s)
+	count := 0
+
+	for i := length - 1; i >= 0; i-- {
+		if count > 0 && count%3 == 0 {
+			result.WriteString(".")
+		}
+		result.WriteByte(s[i])
+		count++
+	}
+
+	runes := []rune(result.String())
+	for i, j := 0, len(runes)-1; i < j; i, j = i+1, j-1 {
+		runes[i], runes[j] = runes[j], runes[i]
+	}
+
+	return "Rp " + string(runes)
 }

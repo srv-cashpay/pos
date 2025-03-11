@@ -34,6 +34,9 @@ func (b *historyRepository) GetById(req dto.GetByIdRequest) (*dto.PosResponse, e
 		City:          tr.Merchant.City,
 		Country:       tr.Merchant.Country,
 		TotalPrice:    calculateTotalPrice(products),
+		Pay:           tr.Pay,
+		Change:        tr.Pay - calculateTotalPrice(products),
+		Description:   tr.Description,
 	}
 
 	return response, nil

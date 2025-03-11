@@ -44,6 +44,7 @@ type PosResponse struct {
 	Product       []ProductResponse `json:"product"`
 	TotalPrice    int               `json:"total_price"`
 	Pay           int               `json:"pay"`
+	Change        int               `json:"change"`
 	Description   string            `json:"description"`
 }
 
@@ -74,10 +75,12 @@ func (r PosResponse) MarshalJSON() ([]byte, error) {
 		*Alias
 		TotalPrice string `json:"total_price"`
 		Pay        string `json:"pay"`
+		Change     string `json:"change"`
 	}{
 		Alias:      (*Alias)(&r),
 		TotalPrice: formatRupiah(r.TotalPrice),
 		Pay:        formatRupiah(r.Pay),
+		Change:     formatRupiah(r.Change),
 	})
 }
 

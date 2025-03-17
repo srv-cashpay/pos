@@ -29,15 +29,20 @@ func (r *historyRepository) Get(req dto.PaginationRequest) (dto.PaginationRespon
 			action := value.Action
 			query := value.Query
 
-			switch action {
-			case "equals":
-				find = find.Where(fmt.Sprintf("%s = ?", column), query)
-			case "contains":
-				find = find.Where(fmt.Sprintf("%s LIKE ?", column), "%"+query+"%")
-			case "in":
-				find = find.Where(fmt.Sprintf("%s IN (?)", column), strings.Split(query, ","))
+			if column == "product_name" {
+				find = find.Where("CAST(product AS TEXT) ILIKE ?", "%"+query+"%")
+			} else {
+				switch action {
+				case "equals":
+					find = find.Where(fmt.Sprintf("%s = ?", column), query)
+				case "contains":
+					find = find.Where(fmt.Sprintf("%s LIKE ?", column), "%"+query+"%")
+				case "in":
+					find = find.Where(fmt.Sprintf("%s IN (?)", column), strings.Split(query, ","))
+				}
 			}
 		}
+
 	}
 
 	find = find.Find(&products)
@@ -84,11 +89,13 @@ func (r *historyRepository) Get(req dto.PaginationRequest) (dto.PaginationRespon
 			continue
 		}
 		posResponse := dto.PosResponse{
-			ID:         pos.ID,
-			UserID:     pos.UserID,
-			CreatedBy:  pos.CreatedBy,
-			Product:    productResponses,
-			TotalPrice: calculateTotalPrice(productResponses),
+			StatusPayment: pos.StatusPayment,
+			ID:            pos.ID,
+			UserID:        pos.UserID,
+			CreatedBy:     pos.CreatedBy,
+			Product:       productResponses,
+			TotalPrice:    calculateTotalPrice(productResponses),
+			Pay:           pos.Pay,
 		}
 		posResponses = append(posResponses, posResponse)
 	}

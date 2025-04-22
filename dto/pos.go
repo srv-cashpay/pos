@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"strconv"
 	"strings"
+	"time"
 )
 
 type GetByIdRequest struct {
@@ -46,6 +47,11 @@ type PosResponse struct {
 	Pay           int               `json:"pay"`
 	Change        int               `json:"change"`
 	Description   string            `json:"description"`
+	Account       AccountResponse   `json:"account"`
+}
+type AccountResponse struct {
+	StatusAccount  bool      `json:"status_account"`
+	AccountExpired time.Time `json:"account_expired"`
 }
 
 type ProductResponse struct {

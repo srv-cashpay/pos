@@ -3,8 +3,8 @@ package entity
 import (
 	"time"
 
+	auth "github.com/srv-cashpay/auth/entity"
 	"github.com/srv-cashpay/merchant/entity"
-
 	"gorm.io/gorm"
 )
 
@@ -14,6 +14,7 @@ type Pos struct {
 	MerchantID    string                `gorm:"type:varchar(36);index" json:"merchant_id"`
 	StatusPayment string                `gorm:"status_payment" json:"status_payment"`
 	Merchant      entity.MerchantDetail `json:"merchant" gorm:"foreignKey:MerchantID;references:ID"`
+	Account       auth.UserVerified     `json:"account" gorm:"foreignKey:UserID;references:ID"`
 	Product       []byte                `gorm:"type:json" json:"product"`
 	Pay           int                   `gorm:"pay" json:"pay"`
 	Description   string                `gorm:"description" json:"description"`

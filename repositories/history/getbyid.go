@@ -23,7 +23,7 @@ func (b *historyRepository) GetById(req dto.GetByIdRequest) (*dto.PosResponse, e
 	}
 
 	var discounts []dto.DiscountResponse
-	if err := json.Unmarshal(tr.Product, &products); err != nil {
+	if err := json.Unmarshal(tr.Discount, &products); err != nil {
 		return nil, err
 	}
 

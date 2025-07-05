@@ -22,22 +22,27 @@ func (b *historyRepository) GetById(req dto.GetByIdRequest) (*dto.PosResponse, e
 		return nil, err
 	}
 
+	var discounts []dto.DiscountResponse
+	if err := json.Unmarshal(tr.Product, &products); err != nil {
+		return nil, err
+	}
+
 	response := &dto.PosResponse{
-		ID:                 tr.ID,
-		UserID:             tr.UserID,
-		StatusPayment:      tr.StatusPayment,
-		MerchantID:         tr.MerchantID,
-		CreatedBy:          tr.CreatedBy,
-		Product:            products,
-		MerchantName:       tr.Merchant.MerchantName,
-		Address:            tr.Merchant.Address,
-		City:               tr.Merchant.City,
-		Country:            tr.Merchant.Country,
-		TotalPrice:         calculateTotalPrice(products),
-		DiscountPercentage: tr.Discount.DiscountPercentage,
-		Pay:                tr.Pay,
-		Change:             tr.Pay - calculateTotalPrice(products),
-		Description:        tr.Description,
+		ID:            tr.ID,
+		UserID:        tr.UserID,
+		StatusPayment: tr.StatusPayment,
+		MerchantID:    tr.MerchantID,
+		CreatedBy:     tr.CreatedBy,
+		Product:       products,
+		MerchantName:  tr.Merchant.MerchantName,
+		Address:       tr.Merchant.Address,
+		City:          tr.Merchant.City,
+		Country:       tr.Merchant.Country,
+		TotalPrice:    calculateTotalPrice(products),
+		Discount:      discounts,
+		Pay:           tr.Pay,
+		Change:        tr.Pay - calculateTotalPrice(products),
+		Description:   tr.Description,
 	}
 
 	return response, nil

@@ -16,6 +16,7 @@ type Pos struct {
 	Merchant      entity.MerchantDetail `json:"merchant" gorm:"foreignKey:MerchantID;references:ID"`
 	Account       auth.UserVerified     `json:"account" gorm:"foreignKey:UserID;references:ID"`
 	Product       []byte                `gorm:"type:json" json:"product"`
+	Discount      entity.Discount       `json:"discount" gorm:"foreignKey:MerchantID;references:ID"`
 	Pay           int                   `gorm:"pay" json:"pay"`
 	Description   string                `gorm:"description" json:"description"`
 	CreatedBy     string                `gorm:"created_by" json:"created_by"`

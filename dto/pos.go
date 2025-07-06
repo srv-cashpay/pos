@@ -43,7 +43,8 @@ type PosResponse struct {
 	CreatedBy          string             `json:"created_by"`
 	Product            []ProductResponse  `json:"product"`
 	Discount           []DiscountResponse `json:"discount"`
-	Tax                int                `json:"tax"`
+	Tax                []TaxResponse      `json:"tax"`
+	TaxAmount          int                `json:"tax_amount"`
 	TotalPrice         int                `json:"total_price"`
 	TotalAfterDiscount int                `json:"total_after_discount"`
 	TotalWithTax       int                `json:"total_with_tax"`

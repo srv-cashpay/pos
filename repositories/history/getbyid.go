@@ -12,7 +12,6 @@ func (b *historyRepository) GetById(req dto.GetByIdRequest) (*dto.PosResponse, e
 		ID: req.ID,
 	}
 
-	// Ambil data POS + relasi Merchant, Discount, Tax
 	if err := b.DB.Where("id = ?", tr.ID).
 		Preload("Merchant").
 		Preload("Discount").
@@ -21,13 +20,11 @@ func (b *historyRepository) GetById(req dto.GetByIdRequest) (*dto.PosResponse, e
 		return nil, err
 	}
 
-	// Unmarshal product JSON
 	var products []dto.ProductResponse
 	if err := json.Unmarshal(tr.Product, &products); err != nil {
 		return nil, err
 	}
 
-	// Siapkan discount
 	var discounts []dto.DiscountResponse
 	var discountPercents []uint
 	for _, d := range tr.Discount {
@@ -37,7 +34,6 @@ func (b *historyRepository) GetById(req dto.GetByIdRequest) (*dto.PosResponse, e
 		discountPercents = append(discountPercents, d.DiscountPercentage)
 	}
 
-	// Siapkan tax
 	var taxs []dto.TaxResponse
 	var taxPercents []uint
 	for _, t := range tr.Tax {
@@ -49,21 +45,10 @@ func (b *historyRepository) GetById(req dto.GetByIdRequest) (*dto.PosResponse, e
 
 	// Hitung harga
 	totalPrice := calculateTotalPrice(products)
-	discountedTotal := calculateDiscountedTotal(totalPrice, discountPercents)
+	totalAfterDiscount := calculateDiscountedTotal(totalPrice, discountPercents)
+	taxAmount := calculateTaxAmount(totalAfterDiscount, taxPercents)
+	totalFinal := totalAfterDiscount + taxAmount
 
-	// Hitung tax total
-	var totalTaxPercent uint
-	for _, t := range taxPercents {
-		totalTaxPercent += t
-	}
-	if totalTaxPercent > 100 {
-		totalTaxPercent = 100
-	}
-
-	taxAmount := calculateTax(discountedTotal, totalTaxPercent)
-	totalWithTax := discountedTotal + taxAmount
-
-	// Bangun response
 	response := &dto.PosResponse{
 		ID:                 tr.ID,
 		UserID:             tr.UserID,
@@ -76,19 +61,19 @@ func (b *historyRepository) GetById(req dto.GetByIdRequest) (*dto.PosResponse, e
 		CreatedBy:          tr.CreatedBy,
 		Product:            products,
 		Discount:           discounts,
-		Tax:                taxAmount,
+		Tax:                taxs,
+		TaxAmount:          taxAmount,
 		TotalPrice:         totalPrice,
-		TotalAfterDiscount: discountedTotal,
-		TotalWithTax:       totalWithTax,
+		TotalAfterDiscount: totalAfterDiscount,
+		TotalWithTax:       totalFinal,
 		Pay:                tr.Pay,
-		Change:             tr.Pay - totalWithTax,
+		Change:             tr.Pay - totalFinal,
 		Description:        tr.Description,
 	}
 
 	return response, nil
 }
 
-// Hitung harga total sebelum diskon
 func calculateTotalPrice(products []dto.ProductResponse) int {
 	total := 0
 	for _, p := range products {
@@ -97,7 +82,6 @@ func calculateTotalPrice(products []dto.ProductResponse) int {
 	return total
 }
 
-// Hitung harga setelah diskon (ambil diskon terbesar)
 func calculateDiscountedTotal(total int, discounts []uint) int {
 	var maxDiscount uint
 	for _, d := range discounts {
@@ -108,11 +92,16 @@ func calculateDiscountedTotal(total int, discounts []uint) int {
 	if maxDiscount > 100 {
 		maxDiscount = 100
 	}
-	discounted := total - (total * int(maxDiscount) / 100)
-	return discounted
+	return total - (total * int(maxDiscount) / 100)
 }
 
-// Hitung tax
-func calculateTax(total int, taxPercent uint) int {
-	return total * int(taxPercent) / 100
+func calculateTaxAmount(total int, taxPercents []uint) int {
+	var totalTaxPercent uint
+	for _, t := range taxPercents {
+		totalTaxPercent += t
+	}
+	if totalTaxPercent > 100 {
+		totalTaxPercent = 100
+	}
+	return total * int(totalTaxPercent) / 100
 }

@@ -37,15 +37,16 @@ type PosResponse struct {
 	StatusPayment      string             `json:"status_payment"`
 	MerchantID         string             `json:"merchant_id"`
 	MerchantName       string             `json:"merchant_name"`
-	Discount           []DiscountResponse `json:"discount"`
 	Address            string             `json:"address"`
-	Country            string             `json:"country"`
 	City               string             `json:"city"`
+	Country            string             `json:"country"`
 	CreatedBy          string             `json:"created_by"`
-	Quantity           int                `json:"-"`
 	Product            []ProductResponse  `json:"product"`
+	Discount           []DiscountResponse `json:"discount"`
+	Tax                int                `json:"tax"`
 	TotalPrice         int                `json:"total_price"`
 	TotalAfterDiscount int                `json:"total_after_discount"`
+	TotalWithTax       int                `json:"total_with_tax"`
 	Pay                int                `json:"pay"`
 	Change             int                `json:"change"`
 	Description        string             `json:"description"`
@@ -58,6 +59,10 @@ type AccountResponse struct {
 
 type DiscountResponse struct {
 	DiscountPercentage uint `json:"discount_percentage"`
+}
+
+type TaxResponse struct {
+	TaxPercentage uint `json:"tax_percentage"`
 }
 
 type ProductResponse struct {
@@ -85,14 +90,16 @@ func (r PosResponse) MarshalJSON() ([]byte, error) {
 	type Alias PosResponse
 	return json.Marshal(&struct {
 		*Alias
-		TotalPrice string `json:"total_price"`
-		Pay        string `json:"pay"`
-		Change     string `json:"change"`
+		TotalPrice         string `json:"total_price"`
+		TotalAfterDiscount string `json:"total_after_discount"`
+		Pay                string `json:"pay"`
+		Change             string `json:"change"`
 	}{
-		Alias:      (*Alias)(&r),
-		TotalPrice: formatRupiah(r.TotalPrice),
-		Pay:        formatRupiah(r.Pay),
-		Change:     formatRupiah(r.Change),
+		Alias:              (*Alias)(&r),
+		TotalPrice:         formatRupiah(r.TotalPrice),
+		TotalAfterDiscount: formatRupiah(r.TotalAfterDiscount),
+		Pay:                formatRupiah(r.Pay),
+		Change:             formatRupiah(r.Change),
 	})
 }
 

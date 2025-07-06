@@ -118,11 +118,3 @@ func (r *historyRepository) Get(req dto.PaginationRequest) (dto.PaginationRespon
 
 	return response, totalPages
 }
-
-func calculateTotalPrice(products []dto.ProductResponse) int {
-	total := 0
-	for _, product := range products {
-		total += product.Price * product.Quantity
-	}
-	return total
-}

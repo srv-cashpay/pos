@@ -59,11 +59,13 @@ type AccountResponse struct {
 }
 
 type DiscountResponse struct {
-	DiscountPercentage uint `json:"discount_percentage"`
+	DiscountName       string `json:"discount_name"`
+	DiscountPercentage uint   `json:"discount_percentage"`
 }
 
 type TaxResponse struct {
-	TaxPercentage uint `json:"tax_percentage"`
+	Tax           string `json:"tax"`
+	TaxPercentage uint   `json:"tax_percentage"`
 }
 
 type ProductResponse struct {
@@ -93,12 +95,14 @@ func (r PosResponse) MarshalJSON() ([]byte, error) {
 		*Alias
 		TotalPrice         string `json:"total_price"`
 		TotalAfterDiscount string `json:"total_after_discount"`
+		TotalWithTax       string `json:"total_with_tax"`
 		Pay                string `json:"pay"`
 		Change             string `json:"change"`
 	}{
 		Alias:              (*Alias)(&r),
 		TotalPrice:         formatRupiah(r.TotalPrice),
 		TotalAfterDiscount: formatRupiah(r.TotalAfterDiscount),
+		TotalWithTax:       formatRupiah(r.TotalWithTax),
 		Pay:                formatRupiah(r.Pay),
 		Change:             formatRupiah(r.Change),
 	})

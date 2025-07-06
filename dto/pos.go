@@ -32,23 +32,24 @@ type ProductRequest struct {
 }
 
 type PosResponse struct {
-	ID            string             `json:"id"`
-	UserID        string             `json:"user_id"`
-	StatusPayment string             `json:"status_payment"`
-	MerchantID    string             `json:"merchant_id"`
-	MerchantName  string             `json:"merchant_name"`
-	Discount      []DiscountResponse `json:"discount"`
-	Address       string             `json:"address"`
-	Country       string             `json:"country"`
-	City          string             `json:"city"`
-	CreatedBy     string             `json:"created_by"`
-	Quantity      int                `json:"-"`
-	Product       []ProductResponse  `json:"product"`
-	TotalPrice    int                `json:"total_price"`
-	Pay           int                `json:"pay"`
-	Change        int                `json:"change"`
-	Description   string             `json:"description"`
-	Account       AccountResponse    `json:"account"`
+	ID                 string             `json:"id"`
+	UserID             string             `json:"user_id"`
+	StatusPayment      string             `json:"status_payment"`
+	MerchantID         string             `json:"merchant_id"`
+	MerchantName       string             `json:"merchant_name"`
+	Discount           []DiscountResponse `json:"discount"`
+	Address            string             `json:"address"`
+	Country            string             `json:"country"`
+	City               string             `json:"city"`
+	CreatedBy          string             `json:"created_by"`
+	Quantity           int                `json:"-"`
+	Product            []ProductResponse  `json:"product"`
+	TotalPrice         int                `json:"total_price"`
+	TotalAfterDiscount int                `json:"total_after_discount"`
+	Pay                int                `json:"pay"`
+	Change             int                `json:"change"`
+	Description        string             `json:"description"`
+	Account            AccountResponse    `json:"account"`
 }
 type AccountResponse struct {
 	StatusAccount  bool      `json:"status_account"`

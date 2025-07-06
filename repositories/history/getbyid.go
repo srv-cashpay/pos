@@ -13,17 +13,12 @@ func (b *historyRepository) GetById(req dto.GetByIdRequest) (*dto.PosResponse, e
 	}
 
 	// Mengambil data Pos sekaligus memuat relasi Merchant
-	if err := b.DB.Where("id = ?", tr.ID).Preload("Merchant").Take(&tr).Error; err != nil {
+	if err := b.DB.Where("id = ?", tr.ID).Preload("Merchant").Preload("Discount").Take(&tr).Error; err != nil {
 		return nil, err
 	}
 
 	var products []dto.ProductResponse
 	if err := json.Unmarshal(tr.Product, &products); err != nil {
-		return nil, err
-	}
-
-	var discounts []dto.DiscountResponse
-	if err := json.Unmarshal(tr.Discount, &products); err != nil {
 		return nil, err
 	}
 
@@ -39,10 +34,14 @@ func (b *historyRepository) GetById(req dto.GetByIdRequest) (*dto.PosResponse, e
 		City:          tr.Merchant.City,
 		Country:       tr.Merchant.Country,
 		TotalPrice:    calculateTotalPrice(products),
-		Discount:      discounts,
-		Pay:           tr.Pay,
-		Change:        tr.Pay - calculateTotalPrice(products),
-		Description:   tr.Description,
+		Discount: []dto.DiscountResponse{
+			{
+				DiscountPercentage: tr.Discount.DiscountPercentage,
+			},
+		},
+		Pay:         tr.Pay,
+		Change:      tr.Pay - calculateTotalPrice(products),
+		Description: tr.Description,
 	}
 
 	return response, nil

@@ -22,6 +22,13 @@ func (b *historyRepository) GetById(req dto.GetByIdRequest) (*dto.PosResponse, e
 		return nil, err
 	}
 
+	var discounts []dto.DiscountResponse
+	for _, d := range tr.Discount {
+		discounts = append(discounts, dto.DiscountResponse{
+			DiscountPercentage: d.DiscountPercentage,
+		})
+	}
+
 	response := &dto.PosResponse{
 		ID:            tr.ID,
 		UserID:        tr.UserID,
@@ -34,14 +41,10 @@ func (b *historyRepository) GetById(req dto.GetByIdRequest) (*dto.PosResponse, e
 		City:          tr.Merchant.City,
 		Country:       tr.Merchant.Country,
 		TotalPrice:    calculateTotalPrice(products),
-		Discount: []dto.DiscountResponse{
-			{
-				DiscountPercentage: tr.Discount.DiscountPercentage,
-			},
-		},
-		Pay:         tr.Pay,
-		Change:      tr.Pay - calculateTotalPrice(products),
-		Description: tr.Description,
+		Discount:      discounts,
+		Pay:           tr.Pay,
+		Change:        tr.Pay - calculateTotalPrice(products),
+		Description:   tr.Description,
 	}
 
 	return response, nil

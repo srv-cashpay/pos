@@ -29,6 +29,7 @@ func (b *historyRepository) GetById(req dto.GetByIdRequest) (*dto.PosResponse, e
 	var discountPercents []uint
 	for _, d := range tr.Discount {
 		discounts = append(discounts, dto.DiscountResponse{
+			DiscountName:       d.DiscountName,
 			DiscountPercentage: d.DiscountPercentage,
 		})
 		discountPercents = append(discountPercents, d.DiscountPercentage)
@@ -38,6 +39,7 @@ func (b *historyRepository) GetById(req dto.GetByIdRequest) (*dto.PosResponse, e
 	var taxPercents []uint
 	for _, t := range tr.Tax {
 		taxs = append(taxs, dto.TaxResponse{
+			Tax:           t.Tax,
 			TaxPercentage: t.TaxPercentage,
 		})
 		taxPercents = append(taxPercents, t.TaxPercentage)

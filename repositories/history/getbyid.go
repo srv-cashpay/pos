@@ -13,7 +13,7 @@ func (b *historyRepository) GetById(req dto.GetByIdRequest) (*dto.PosResponse, e
 	}
 
 	// Mengambil data Pos sekaligus memuat relasi Merchant
-	if err := b.DB.Where("id = ?", tr.ID).Preload("Merchant").Preload("Discount").Take(&tr).Error; err != nil {
+	if err := b.DB.Where("id = ?", tr.ID).Preload("Merchant").Take(&tr).Error; err != nil {
 		return nil, err
 	}
 

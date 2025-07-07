@@ -24,11 +24,13 @@ func (u *posRepository) Requirement(req dto.RequirementRequest) (dto.Requirement
 	}
 
 	resp := dto.RequirementResponse{
-		TaxPercentage: []dto.TaxResponse{{
+		Tax: []dto.TaxResponse{{
+			Tax:           t.Tax,
 			TaxPercentage: t.TaxPercentage,
 		},
 		},
-		DiscountPercentage: []dto.DiscountResponse{{
+		Discount: []dto.DiscountResponse{{
+			DiscountName:       d.DiscountName,
 			DiscountPercentage: d.DiscountPercentage,
 		},
 		},

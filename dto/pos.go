@@ -78,8 +78,8 @@ type RequirementRequest struct {
 	MerchantID string `json:"merchant_id"`
 }
 type RequirementResponse struct {
-	TaxPercentage      []TaxResponse      `json:"tax_percentage"`
-	DiscountPercentage []DiscountResponse `json:"discount_percentage"`
+	Tax      []TaxResponse      `json:"tax_percentage"`
+	Discount []DiscountResponse `json:"discount_percentage"`
 }
 
 type ProductResponse struct {

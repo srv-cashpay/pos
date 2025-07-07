@@ -11,6 +11,7 @@ type PosService interface {
 	Paid(req dto.PosRequest) (dto.PosResponse, error)
 	Unpaid(req dto.PosRequest) (dto.PosResponse, error)
 	GetById(req dto.GetByIdRequest) (*dto.PosUpdateResponse, error)
+	Requirement(req dto.RequirementRequest) (dto.RequirementResponse, error)
 	Update(req dto.PosUpdateRequest) (dto.PosUpdateResponse, error)
 }
 

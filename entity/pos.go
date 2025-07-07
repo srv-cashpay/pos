@@ -15,6 +15,8 @@ type Pos struct {
 	StatusPayment string                `gorm:"status_payment" json:"status_payment"`
 	Merchant      entity.MerchantDetail `json:"merchant" gorm:"foreignKey:MerchantID;references:ID"`
 	Account       auth.UserVerified     `json:"account" gorm:"foreignKey:UserID;references:ID"`
+	DiscountApply uint                  `gorm:"discount_apply,omitempty" json:"discount_apply"`
+	TaxApply      uint                  `gorm:"tax_apply,omitempty" json:"tax_apply"`
 	Product       []byte                `gorm:"type:json" json:"product"`
 	Discount      []entity.Discount     `json:"discount" gorm:"foreignKey:MerchantID;references:MerchantID"`
 	Tax           []entity.Tax          `json:"tax" gorm:"foreignKey:MerchantID;references:MerchantID"`

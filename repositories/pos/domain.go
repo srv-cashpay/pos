@@ -13,6 +13,7 @@ type DomainRepository interface {
 	Update(req dto.PosUpdateRequest) (dto.PosUpdateResponse, error)
 	GetById(req dto.GetByIdRequest) (*dto.PosUpdateResponse, error)
 	GetUserVerified(userID string) (auth.UserVerified, error)
+	Requirement(req dto.RequirementRequest) (dto.RequirementResponse, error)
 }
 
 type posRepository struct {

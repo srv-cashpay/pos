@@ -25,5 +25,4 @@ func (b *domainHandler) GetById(c echo.Context) error {
 	}
 
 	return res.SuccessResponse(transaction).Send(c)
-
 }

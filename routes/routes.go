@@ -33,6 +33,7 @@ func New() *echo.Echo {
 		pos.POST("/create/unpaid", posH.Unpaid)
 		pos.PUT("/update/:id", posH.Update)
 		pos.GET("/:id", posH.GetById)
+		pos.GET("/requirement", posH.Requirement)
 	}
 
 	history := e.Group("/api/history", middlewares.AuthorizeJWT(JWT))

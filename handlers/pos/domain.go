@@ -11,6 +11,7 @@ type DomainHandler interface {
 	Unpaid(c echo.Context) error
 	Update(c echo.Context) error
 	GetById(c echo.Context) error
+	Requirement(c echo.Context) error
 }
 
 type domainHandler struct {

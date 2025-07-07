@@ -20,6 +20,8 @@ type PosRequest struct {
 	Quantity      int              `json:"quantity"`
 	CreatedBy     string           `json:"created_by"`
 	Product       []ProductRequest `json:"product"`
+	DiscountApply uint             `json:"discount_apply"`
+	TaxApply      uint             `json:"tax_apply"`
 	Pay           int              `json:"pay"`
 	Description   string           `json:"description"`
 }
@@ -44,6 +46,8 @@ type PosResponse struct {
 	Product            []ProductResponse  `json:"product"`
 	Discount           []DiscountResponse `json:"discount"`
 	Tax                []TaxResponse      `json:"tax"`
+	DiscountApply      uint               `json:"discount_apply"`
+	TaxApply           uint               `json:"tax_apply"`
 	TaxAmount          int                `json:"tax_amount"`
 	TotalPrice         int                `json:"total_price"`
 	TotalAfterDiscount int                `json:"total_after_discount"`
@@ -66,6 +70,16 @@ type DiscountResponse struct {
 type TaxResponse struct {
 	Tax           string `json:"tax"`
 	TaxPercentage uint   `json:"tax_percentage"`
+}
+
+type RequirementRequest struct {
+	ID         string `json:"id"`
+	UserID     string `json:"user_id"`
+	MerchantID string `json:"merchant_id"`
+}
+type RequirementResponse struct {
+	TaxPercentage      uint `json:"tax_percentage"`
+	DiscountPercentage uint `json:"discount_percentage"`
 }
 
 type ProductResponse struct {

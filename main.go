@@ -1,8 +1,6 @@
 package main
 
 import (
-	"log"
-
 	"github.com/srv-cashpay/pos/routes"
 
 	"github.com/labstack/echo/v4"
@@ -15,14 +13,8 @@ func main() {
 
 	e.Use(middleware.CORS())
 
-	// Sertifikat Let's Encrypt
-	certFile := "/certs/fullchain.pem"
-	keyFile := "/certs/privkey.pem"
-	// Jalankan HTTPS langsung dari Echo
-	err := e.StartTLS(":2345", certFile, keyFile)
-	if err != nil {
-		log.Fatal("StartTLS error: ", err)
-	}
+	e.Logger.Fatal(e.Start(":2345"))
+
 }
 
 // CORSMiddleware ..

@@ -1,6 +1,8 @@
+
 version: '3.1'
 
 services:
+
   api_pos:
     restart: always
     container_name: api_pos
@@ -11,14 +13,42 @@ services:
     tty: true
     volumes:
       - .:/app
-      - /opt/certs:/certs:ro    
     ports:
       - 2411:2345
+    depends_on:
+      - db
     networks:
-      - shared_network
-    env_file:
-      - .env
+      - local
 
+  db:
+    container_name: db_pos
+    image: postgres:14-alpine 
+    environment: 
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    volumes: 
+      - db_data:/var/lib/postgresql
+    ports:
+      - "5492:5432"
+    networks:
+      - local
+
+  elasticsearch:
+    image: 'docker.elastic.co/elasticsearch/elasticsearch:7.13.3'
+    container_name: elasticsearchpos
+    environment:
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ports:
+      - "9600:9200"
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+
+volumes:
+    db_data:
+    esdata:
+      driver: local
 networks:
-  shared_network:
-    external: true
+  local:
+    driver: bridge

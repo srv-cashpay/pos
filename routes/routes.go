@@ -36,10 +36,10 @@ func New() *echo.Echo {
 		pos.GET("/requirement", posH.Requirement)
 	}
 
-	history := e.Group("/api/history", middlewares.AuthorizeJWT(JWT))
+	history := e.Group("/api/pos", middlewares.AuthorizeJWT(JWT))
 	{
-		history.GET("/pagination", historyH.Get)
-		history.GET("/:id", historyH.GetById)
+		history.GET("/history/pagination", historyH.Get)
+		history.GET("/history/:id", historyH.GetById)
 	}
 
 	return e
